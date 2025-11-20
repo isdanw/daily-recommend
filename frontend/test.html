@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>测试API调用</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>测试API调用</h1>
+    <div v-if="loading">加载中...</div>
+    <div v-if="error" style="color: red;">{{ error }}</div>
+    <div v-if="!loading && !error">
+      <h2>测试结果:</h2>
+      <pre>{{ result }}</pre>
+    </div>
+  </div>
+
+  <script>
+    const { createApp } = Vue
+    createApp({
+      data() {
+        return {
+          result: '',
+          loading: true,
+          error: null
+        }
+      },
+      async mounted() {
+        try {
+          console.log('开始测试API调用');
+          const res = await fetch('http://localhost:8000/fortune/1')
+          console.log('运势API响应状态:', res.status);
+          if (!res.ok) throw new Error(`获取运势数据失败: ${res.status}`)
+          const data = await res.json()
+          console.log('运势数据:', data);
+          this.result = JSON.stringify(data, null, 2)
+        } catch (err) {
+          console.error('Error fetching data:', err)
+          this.error = '数据加载失败: ' + err.message
+        } finally {
+          this.loading = false
+        }
+      }
+    }).mount('#app')
+  </script>
+</body>
+</html>

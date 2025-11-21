@@ -11,7 +11,7 @@ def generate_outfit_image(lucky_color: str, weather: str):
     
     headers = {"Authorization": f"Bearer {api_key}"}
     payload = {
-        "model": "wanx-v1",
+        "model": "Qwen/Qwen-Image",
         "prompt": f"A stylish person wearing {lucky_color} clothing, {weather} weather, realistic style",
         "n": 1,
         "size": "1024*1024"
